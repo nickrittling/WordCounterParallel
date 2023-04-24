@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 #include <map>
-
+#include <CL/sycl.hpp>
 
 
 class BloomFilter {
@@ -23,12 +23,27 @@ public:
     if (!infile)
       std::cout << "File not found\n";
     std::string line;
+    std::vector<std::string> temp;
     while (getline(infile, line)) {
       n_++;
-      insert(line);
+      temp.push_back(line);
+      //insert(line);
     }
     infile.close();
-  }
+
+    sycl::queue q;
+    sycl::buffer<char,1> buf(temp, sycl::range<1>(temp.size())); 
+    q.submit([&](sycl::handler& h){
+		    auto data_acc = buf.get_access<sycl::access::mode::read_write>(h);
+		    h.parallel_for<temp.size(), [=](id<1> i){
+		   	insert(temp[i]);
+			});//end submit
+
+    });    
+
+
+
+  }//end constructor
 
   int getConfilct() { return conflict; }
 
@@ -119,10 +134,23 @@ public:
     	if (!infile)
       	std::cout << "File not found\n";
     	std::string line;
+	std::vector<std::string> temp;
     	while (getline(infile, line)) {
-        	wordcount(line);
+        	temp.push_back(line);
    	 }
    	infile.close();
+
+	sycl::queue q;
+    	sycl::buffer<char,1> buf(temp, sycl::range<1>(temp.size()));
+    	q.submit([&](sycl::handler& h){
+                    auto data_acc = buf.get_access<sycl::access::mode::read_write>(h);
+                    h.parallel_for<temp.size(), [=](id<1> i){
+                        wordcount(temp[i]);
+                        });//end submit
+
+    });
+
+
   }//end WCStart
 
 

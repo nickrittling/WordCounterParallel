@@ -17,7 +17,7 @@ project(WordCounterParallel)
 #FetchContent_MakeAvailable(cli11)
 
 #FetchContent_MakeAvailable(cli11)
-find_package(OpenSSL REQUIRED)
+#find_package(OpenSSL REQUIRED)
 
 
 #add_subdirectory(external/CLI11)
@@ -30,6 +30,6 @@ WordCounterParallel.cpp
 )
 #target_link_libraries(bloom CLI11)
 #target_link_libraries(bloom sha256)
-target_link_libraries(WordCounterParallel OpenSSL::SSL OpenSSL::Crypto)
+#target_link_libraries(WordCounterParallel OpenSSL::SSL OpenSSL::Crypto)
 
 

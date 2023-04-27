@@ -23,16 +23,11 @@ int main(int argc, char **argv) {
 
   app.add_option("-m, --bits", m, "Allocating the size of the vector");
 
-  app.add_option("-k, --hash", k, "Hashes to try");
-
   CLI11_PARSE(app, argc, argv);
-  if (k < 2 || k > 3) {
-    k = 2;
-  }
 
   auto start = std::chrono::high_resolution_clock::now();
   std::ios_base::sync_with_stdio(false);
-  BloomFilter bf( m, k, s);
+  BloomFilter bf( m, s);
   bf.WCStart();
   bf.outputMap();
   auto end = std::chrono::high_resolution_clock::now();
